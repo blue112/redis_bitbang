@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "hashtable.h"
+#include "utils.h"
 
 static unsigned long hash(unsigned char *str)
 {
@@ -133,13 +134,13 @@ HashTable *ht_create(int size)
     ht->total_size = size;
     ht->memory = calloc(ht->total_size, sizeof(HashTableEntry)); // So it's set to 0
 
-    printf("Allocated %ld bytes\n", ht->total_size * sizeof(HashTableEntry));
-
     return ht;
 }
 
 void ht_dump(HashTable *ht)
 {
+    size_t memory_used = sizeof(HashTable) + sizeof(HashTableEntry) * ht->total_size;
+
     printf("==== HASHTABLE DUMP ====\n");
     for (int slot = 0; slot < ht->total_size; slot++)
     {
@@ -151,6 +152,7 @@ void ht_dump(HashTable *ht)
         }
         else
         {
+            memory_used += sizeof(HashTableElement) * entry->size;
             for (int index = 0; index < entry->size; index++)
             {
                 HashTableElement *element = entry->bucket + index;
@@ -162,6 +164,7 @@ void ht_dump(HashTable *ht)
         }
     }
     printf("======= DUMP END =======\n");
+    printf("TOTAL MEMORY USED: %s\n", readable_fs(memory_used));
 }
 
 void ht_destroy(HashTable *ht)
