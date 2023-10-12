@@ -1,3 +1,5 @@
+#pragma once
+
 #define MAX_KEY_SIZE 50
 
 typedef struct s_HashTableElement
@@ -18,7 +20,7 @@ typedef struct s_HashTable
     HashTableEntry *memory;
 } HashTable;
 
-void ht_dump(HashTable *ht);
+void ht_dump(int out_fd, HashTable *ht);
 int ht_delete(HashTable *ht, char *key);
 int ht_set(HashTable *ht, char *key, int value);
 int ht_get(HashTable *ht, char *key, int *out_value);

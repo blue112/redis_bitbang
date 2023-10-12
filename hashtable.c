@@ -137,18 +137,18 @@ HashTable *ht_create(int size)
     return ht;
 }
 
-void ht_dump(HashTable *ht)
+void ht_dump(int out_fd, HashTable *ht)
 {
     size_t memory_used = sizeof(HashTable) + sizeof(HashTableEntry) * ht->total_size;
 
-    printf("==== HASHTABLE DUMP ====\n");
+    dprintf(out_fd, "==== HASHTABLE DUMP ====\n");
     for (int slot = 0; slot < ht->total_size; slot++)
     {
-        printf("SLOT %d\n", slot);
+        dprintf(out_fd, "SLOT %d\n", slot);
         HashTableEntry *entry = ht->memory + slot;
         if (entry->size == 0)
         {
-            printf("    (empty)\n");
+            dprintf(out_fd, "    (empty)\n");
         }
         else
         {
@@ -157,14 +157,14 @@ void ht_dump(HashTable *ht)
             {
                 HashTableElement *element = entry->bucket + index;
                 if (element->key[0] == '\0')
-                    printf("    (available)\n");
+                    dprintf(out_fd, "    (available)\n");
                 else
-                    printf("    \"%s\" -> \"%d\"\n", element->key, element->value);
+                    dprintf(out_fd, "    \"%s\" -> \"%d\"\n", element->key, element->value);
             }
         }
     }
-    printf("======= DUMP END =======\n");
-    printf("TOTAL MEMORY USED: %s\n", readable_fs(memory_used));
+    dprintf(out_fd, "======= DUMP END =======\n");
+    dprintf(out_fd, "TOTAL MEMORY USED: %s\n", readable_fs(memory_used));
 }
 
 void ht_destroy(HashTable *ht)

@@ -1,8 +1,14 @@
 %.o: %.c
-	gcc -c -Wall -Werror $^
+	clang -c -Wall -Werror $^
 
-hashtable: hashtable.o main.o
-	gcc -lreadline -o hashtable $^
+hashtable: hashtable.o main.o cli.o
+	clang -lreadline -o hashtable $^
+
+server: hashtable.o serve.o cli.o
+	clang -lreadline -o server $^
+
+clean:
+	rm *.o hashtable server
 
 valgrind: hashtable
 	valgrind --suppressions=valgrind_suppr ./hashtable
